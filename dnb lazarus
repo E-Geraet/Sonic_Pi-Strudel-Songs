@@ -1,0 +1,67 @@
+with_fx :reverb, room: 0.7, mix: 0.25 do
+  with_fx :lpf, cutoff: 80 do
+    with_fx :reverb, room: 0.7, mix: 0.25 do
+      with_fx :ping_pong do
+        live_loop :main do
+          sample main, beat_stretch: 256
+          sleep 4096
+        end
+      end
+    end
+  end
+end
+
+
+
+define :rate_for_semitones do |s|
+  2 ** (s / 12.0)
+end
+
+sleep 32
+
+with_fx :reverb, room: 0.7, mix: 0.25 do
+  with_fx :lpf, cutoff: 80 do
+    with_fx :echo, phase: 0.375, mix: 0.2, decay: 2 do
+      with_fx :compressor, threshold: 0.3, slope_above: 0.5 do
+        with_fx :level, amp: 0.75 do
+          live_loop :drum1 do
+            #stop
+            8.times do |s|
+              
+              akkord_semitones = [-5, -1, 2][s % 3]  # C, E, G
+              akkord_rate = rate_for_semitones(akkord_semitones)
+              
+              32.times do |i|
+                sample kick if a[i] == 1 && song[s] != 0
+                sample kick2, rate: 1.2 if a[i] == 1 && song[s] != 0
+                sample dnb2, beat_stretch: 12,  finish: 0.12, rate: 1.5 if a[i] == 1
+                sample hisnare, rate: 1.2 if b[i] == 1 && song[s] != 0
+                sample hisnare2, rate: 1.2 if b[i] == 1 && song[s] != 0
+                sample :loop_amen, start: 0.25, finish: 0.35, rate: 1.5 if b[i] == 1
+                sample cybalclosed, rate: 1.5 if c[i] == 1
+                sample cybalopen, amp: 0.3, rate: 1.2, finish: 0.1 if d[i] == 1
+                sample :loop_amen, start: 0.42, finish: 0.55, rate: 1.5 if e[i] == 1
+                
+                with_fx :distortion, amp: 0.8 - (a[i] / 2), distort: 0.5 do
+                  with_fx :rlpf, cutoff: h[i], res: 0.5 do
+                    
+                    sample :bass_dnb_f, amp: 0.1, rate: g[i] * akkord_rate, finish: 0.45 if f[i] == 1 && song[s] != 2
+                  end
+                end
+                
+                use_synth :dark_ambience
+                play :c3, amp: 0.6 if l[i] == 1 && song[s] != 2 && song[s] != 3
+                play :e3, amp: 0.2 if n[i] == 1 && s % 2 == 0 && song[s] % 2 == 0
+                play :g3, amp: 0.2 if n[i] == 1 && s % 2 == 1 && song[s] % 2 == 1
+                
+                sleep 0.5
+              end
+              sleep 0.0078125
+            end
+            sleep 32
+          end
+        end
+      end
+    end
+  end
+end
