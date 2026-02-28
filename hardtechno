@@ -1,0 +1,5 @@
+setcps(95 / 60 / 4) 
+
+s("hardtec:1")
+  .loopAt(1)
+  .slow(1) 
