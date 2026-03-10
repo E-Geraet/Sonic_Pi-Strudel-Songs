@@ -1,5 +1,5 @@
-setcps(95 / 60 / 4) 
-
-s("hardtec:1")
-  .loopAt(1)
-  .slow(1) 
+setcps(140 / 60 / 4)
+stack(
+  s("hardtec").n("0").loopAt(2).loop(1).cut(1),
+  s("hardtec").n("<~ 1 2>").slow(4).cut(1)
+)
