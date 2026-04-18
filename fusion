@@ -1,0 +1,396 @@
+//song1
+setcpm(26)
+
+ 
+
+var stepper = n("0 1 2 3 4 5 6 7 8 9 10 11 7 9 10 12 10 9 7 5 3 2 0 1".palindrome())
+
+  .scale("a:major:pentatonic")
+
+  .s("gm_alto_sax")
+
+  .oct("<-2,-4>")
+
+  .slow(2)
+
+  .pan(.3)
+
+.clip(.95)
+
+  .gain(.8)
+
+.color("beige")._scope()
+
+ 
+
+var basser = n("<-6 -5 -4 -6 -8 -6 -4 -2>")
+
+  .scale("a:major:pentatonic")
+
+  .s("sawtooth, sqr")
+
+  .clip(.9)
+
+  .seg(12)
+
+  .pan(.7)
+
+.gain(.4)
+
+.color("beige")._scope()
+
+ 
+
+var noodler = n("<[6 | 5 | 3 | [2 3 4]*4]!3 [5 3 2 4 2 1 3 1 0 4 2 <4 -1>][4 6 5 3 2 1]*2[7 5 4 2 0 2 4 5][3 1 0 -1 0 1 3 5]>")
+
+  .someCycles(x => x.rev())
+
+  .scale("a:major:pentatonic")
+
+  .s("gm_contrabass")
+
+  .seg(12)
+
+  .pan(.5)
+
+  .clip(.8)
+
+  .delay(.3)
+
+  .gain(1.2)
+
+.color("beige")._scope()
+
+ 
+
+ 
+
+var drums = stack(
+
+  s("bd:8").struct("x - - - - <-!31 x> <x!62 -> - <x!15 -> - <-!3 <x!7 ->> -"),
+
+  s("cp:9").struct("- - - x - - <-!31 x> <-!30 x> <-!7 x> <x> <-!31 x> <-!3 <x x*2>>"),
+
+).room(.3)
+
+ 
+
+var drums2 = stack(
+
+  s("bd:4").clip(1).struct("x - - - - - x - x - - - x - - x - <- x> x - x - <x!3 -> -"),
+
+  s("cp:9").struct("x - x x - - - - - x - - - - - x - - - <-!3 x> - x <-!3 x> <x!3 <x x*2>>"),
+
+).slow(2).room(.3)
+
+ 
+
+var drums3 = stack(
+
+  s("bd:2").struct("- - x - - - - - - - - - - - - - - - - - - - - -"),
+
+  s("sd:1").struct("x - - x - - - - - - - - - - - - - - - - - x x*2 x"),
+
+  s("lt:0").struct("- x x - - - - - - - - - - - - - - - - - - - - -"),
+
+).slow(2).room(.3)
+
+ 
+
+var hit = s("gm_reverse_cymbal").struct("<x -!31>").early(1).gain(1.2)
+
+ 
+
+var cym = s("hh:4").struct("x x x x x x x x x x x x")
+
+ 
+
+var siren = s("siren:4")
+
+ 
+
+$: stack(s("crackle").gain(2),s("pink").gain(.3)).lpf("4000")
+
+ 
+
+$: arrange(
+
+[1,silence],
+
+[2, stack(drums2, stepper).pan(.5).room(0).hpf(1000).gain(1.2)],
+
+[2, stack(stepper, drums3).pan(.5).room(0).hpf(1000).gain(1.2)],
+
+[16,stack(stepper, basser, drums2, cym, hit)],
+
+[16,stack(noodler.oct(-1).gain(.7), basser, drums2, cym, hit)],
+
+  [.5, stack(stepper.fast(8), noodler.fast(8), siren).hpf(1000).delay(1)],
+
+  [128,stack(stepper, basser, drums2, noodler, cym, hit)],
+
+  [4, stack(drums2, hit).pan(.5).room(0).hpf(1000).gain(1.2)],
+
+)
+
+  .cutoff(perlin.range(2000,6000).slow(3))
+
+  //song2
+
+  
+
+setcpm(20)
+
+ 
+
+// ----------------------------------------------------
+
+// CHORDS
+
+// ----------------------------------------------------
+
+var chords = chord("<[Fm7 Fm Cm Gm]>").slow(4)
+
+ 
+
+// ----------------------------------------------------
+
+// MAIN VOICE
+
+// ----------------------------------------------------
+
+var main = n("0 1 2 3 4 5 6 7".fast(2))
+
+  .set(chords.anchor("c4"))
+
+  .voicing()
+
+  .s("gm_synth_bass_1:3")
+
+  .orbit(2)
+
+  .gain(0.45)
+
+  .color("red")
+
+  .room(1)
+
+  .delay(0.5)
+
+ 
+
+// ----------------------------------------------------
+
+// BASS – EINZIGER SONG-BASS
+
+// ----------------------------------------------------
+
+var songBass =
+
+  n("0 0 2 ~   0 3 2 ~   0 0 3 ~   0 2 3 ~")
+
+    .set(chords.anchor("c2"))
+
+    .voicing()
+
+    .struct("x x - x x - x -".fast(2))
+
+    .s("gm_fretless_bass:1")
+
+    .gain(1.3)
+
+    .clip(0.9)
+
+ 
+
+// ----------------------------------------------------
+
+// LEAD
+
+// ----------------------------------------------------
+
+var lead = n("8 [8 9] <8!3 [8 [9 8]] 9 [10 11]>")
+
+  .set(chords.anchor("c3"))
+
+  .superimpose(x => x.anchor("c4").gain(0.5))
+
+  .voicing()
+
+  .s("gm_baritone_sax, gm_alto_sax")
+
+  .seg(16)
+
+  .clip(0.9)
+
+  .color("pink")
+
+  .postgain(0.7)
+
+  .room(0.7)
+
+ 
+
+// ----------------------------------------------------
+
+// CANON LEAD
+
+// ----------------------------------------------------
+
+var leadCanon = lead
+
+  .anchor("c5")
+
+  .delay(0.25)
+
+  .gain(0.4)
+
+  .room(1)
+
+ 
+
+// ----------------------------------------------------
+
+// DRUMS
+
+// ----------------------------------------------------
+
+var bd = s("bd:6").color("white")
+
+ 
+
+var drums = stack(
+
+  s("bd:6").struct("x - - - x x - <-!7 x> x - - <-!7 x> x <x!7 -> - <x ->"),
+
+  s("sd:9").struct("- - x - - - x - - <-!7 x> x - - <-!7 x> x <- <x!3 x*2>>")
+
+)
+
+.color("teal")
+
+.gain(0.6)
+
+ 
+
+var hat = s("[hh:3 oh:2*<1!7 2>]")
+
+  .fast(8)
+
+  .lpf(2900)
+
+  .pan(".3 .6".fast(4))
+
+ 
+
+var snareOpen = s("sd:9")
+
+  .struct("<[-]!3 [- - - - - - - - - - - - - x x x*2]>")
+
+ 
+
+_$: s("- sd:9*<1!15 <2 4>>, [hh:3 oh:2 ]*2")
+
+  .fast(4)
+
+  .lpf(2000)
+
+  .color("gold")
+
+ 
+
+// ----------------------------------------------------
+
+// TEXTURE
+
+// ----------------------------------------------------
+
+$: stack(
+
+  s("crackle").gain(2),
+
+  s("pink").gain(0.3)
+
+)
+
+.lpf(4000)
+
+.slow(16)
+
+ 
+
+// ----------------------------------------------------
+
+// ARRANGEMENT
+
+// ----------------------------------------------------
+
+$: arrange(
+
+  // Intro (silent impact)
+
+  [1, stack(main, songBass, drums, bd).gain(0)],
+
+ 
+
+  // Aufbau
+
+  [4, main],
+
+  [4, stack(main, bd.fast(2))],
+
+ 
+
+  // Groove
+
+  [4, stack(main, songBass, bd.fast(4))],
+
+  [4, stack(main, songBass, drums, hat)],
+
+ 
+
+  // Lead kommt rein
+
+  [4, stack(main, songBass, drums, hat, lead).room(1)],
+
+ 
+
+  // ==========================================
+
+  // PEAK
+
+  // ==========================================
+
+  [4, stack(
+
+        main.anchor("c5").gain(0.55),
+
+        songBass,
+
+        drums,
+
+        hat,
+
+        lead,
+
+        leadCanon
+
+      ).room(1.2)
+
+  ],
+
+ 
+
+  // Outro
+
+  [4, stack(drums, songBass)],
+
+  [1, bd],
+
+  [1, silence],
+
+)
+
+.cutoff(perlin.range(2000, 5000).slow(4))
+
+.punchcard()
