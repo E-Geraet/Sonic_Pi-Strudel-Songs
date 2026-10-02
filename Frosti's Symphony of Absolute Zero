@@ -1,0 +1,253 @@
+//// Inspired by TF
+setcpm(30.00);
+
+$: trk_0()
+
+function trk_0() {
+  const ramp = (n, from, to = from) =>
+    Array.from({ length: n }, (_, i) => (n > 1 ? from + ((to - from) * i) / (n - 1) : from));
+
+  const gOpen = "[[g2,g3]@2 [bb2,bb3]@2, ~@4]";
+  const aPulse = "[a2@1 a2@1 c3@1 a2@1, [a1,a2]@4]";
+  const gRun = "[d4@1 g3@1 bb2@1 g2@1, ~@4]";
+
+  return note(
+    cat(
+      gOpen,
+      "[[d3,d4]@2 [g2,g3]@2, ~@4]",
+      "[bb2@4, f#2@4]",
+      "[bb2@4, f#2@4]",
+      gOpen,
+      "[[d3,d4]@2 [g2,g3]@2, ~@4]",
+
+      "[~@4, f#2@4, b1@4]",
+      "[f#3@4, f#2@4, b1@4]",
+
+      gOpen,
+      "[d3@2 g3@2, ~@4]",
+      "[f#3@4, [f#2,bb2]@4]",
+      "[f#3@4, f#1@4, [f#2,bb2]@4]",
+      "[d3@2 bb2@2, g2@2 ~@2]",
+      "[a2@2 d3@2, ~@2 f#2@2]",
+      "[f#3@2 d3@2, d2@2 d2@2]",
+      "[c3@4, ~@1 a2@2 d2@1, eb2@2 f#2@2]",
+      "[g2@2 bb2@2, ~@1 g3@2 g3@1, d2@1 ~@1 ~@2, [g1,g2]@4]",
+      "[~@1 f#3@2 f#3@1, g3@1 ~@1 ~@2, a2@1 ~@1 c3@1 ~@1, ~@1 a2@1 ~@1 a2@1, [g1,g2]@4]",
+      "[f#3@1 bb3@2 bb3@1, bb2@2 d3@2, [bb1,bb2]@4]",
+      "[bb3@1 a3@2 a3@1, ~@2 f#2@2, a2@1 ~@1 ~@2, [bb1,bb2]@4]",
+      "[a3@1 g3@2 g3@1, g2@2 ~@2, ~@2 bb2@1 ~@1, [g1,g2]@4]",
+      "[g3@1 f#3@2 f#3@1, a2@1 ~@1 c3@1 ~@1, [g1,g2]@4]",
+      "[f#3@1 bb3@2 bb3@1, bb2@1 ~@1 d3@1 ~@1, [bb1,bb2]@4]",
+      "[bb3@1 a3@2 ~@1, a2@1 ~@1 c3@1 a3@1, [bb1,bb2]@4]",
+
+      "[g2@2 bb2@1 g2@1, [g1,g2]@4]",
+      aPulse,
+      "[bb2@2 d3@1 bb2@1, [bb1,bb2]@4]",
+      aPulse,
+      "[d4@1 db4@1 bb2@1 g2@1, g2@2 ~@2, [g1,g2]@4]",
+      "[db4@1 a2@1 c4@1 a2@1, a2@1 ~@1 c3@1 ~@1, [a1,a2]@4]",
+      "[db4@1 bb3@1 d3@1 bb2@1, bb2@1 bb2@1 ~@2, [bb1,bb2]@4]",
+      "[c4@1 a2@1 a3@1 a2@1, a2@1 ~@1 c3@1 ~@1, [a1,a2]@4]",
+
+      "[g3@1 g3@1 bb3@1 g3@1, g1@1 d2@1 bb2@1 d2@1]",
+      "[f#3@2 a3@1 f#3@1, d2@1 a2@1 f#2@1 a2@1]",
+      "[bb3@1 bb3@1 d4@1 bb3@1, bb1@1 f2@1 d3@1 f2@1]",
+      "[a3@2 f#3@2, ~@2 [d2,a2]@2]",
+      "[g3@1 g3@1 bb3@1 g3@1, g1@1 d2@1 bb2@1 d2@1]",
+      "[f#3@1 f#3@1 a3@1 f#3@1, d2@1 a2@1 f#2@1 a2@1]",
+      "[bb3@1 a3@1 bb3@1 c4@1, ~@2 ~@1 a3@1]",
+      "[f#3@4, ~@2 d3@2, [d2,a2]@4, ~@2 [f#1,f#2]@2]",
+      "[g2@2 bb2@2, ~@1 g3@2 g3@1, [g1,g2]@4]",
+
+      "[~@1 f#3@2 f#3@1, g3@1 ~@1 ~@2, a2@1 ~@1 c3@1 ~@1, ~@1 a2@1 ~@1 a2@1, [g1,g2]@4]",
+      "[f#3@1 bb3@2 bb3@1, bb2@2 d3@2, [bb1,bb2]@4]",
+      "[bb3@1 a3@2 f#3@1, ~@2 f#2@2, a2@1 ~@1 ~@2, [bb1,bb2]@4]",
+      "[f#3@1 g3@2 g3@1, g2@2 ~@2, ~@2 bb2@1 ~@1, [g1,g2]@4]",
+      "[g3@1 f#3@2 f#3@1, a2@1 ~@1 c3@1 ~@1, [g1,g2]@4]",
+      "[f#3@1 bb3@2 bb3@1, bb2@1 ~@1 d3@1 ~@1, [bb1,bb2]@4]",
+      "[bb3@1 a3@2 ~@1, a2@1 ~@1 c3@1 a3@1, [bb1,bb2]@4]",
+      "[g2@2 bb2@1 g2@1, [g1,g2]@4]",
+
+      aPulse,
+      "[bb2@2 d3@1 bb2@1, [bb1,bb2]@4]",
+      aPulse,
+      "[d4@1 db4@1 bb2@1 g2@1, g2@2 ~@2, [g1,g2]@4]",
+      "[db4@1 a2@1 c4@1 a2@1, a2@1 ~@1 c3@1 ~@1, [a1,a2]@4]",
+      "[db4@1 bb3@1 d3@1 bb2@1, bb2@2 ~@2, [bb1,bb2]@4]",
+      "[a3@1 a2@1 a3@1 f#3@1, a2@1 ~@1 c3@1 ~@1, [a1,a2]@4]",
+      gRun,
+      gRun,
+
+      "[eb4@1 c4@1 f#3@1 d3@1, ~@4]",
+      "[d4@1 c4@1 a3@1 f#3@1, ~@4]",
+      gRun,
+      "[g4@2 ~@2, d4@1 g3@1 bb2@1 g2@1]",
+      "[g4@2 ~@2, eb4@1 c4@1 f#3@1 d3@1]",
+      "[[f#3,d4,f#4]@1 f#4@1 f#4@1 f#4@1, d2@1 [b1,eb3,c4]@1 [ab1,c3,a3]@1 [f1,a2,f#3]@1]",
+      "[g4@2 bb2@2, g2@1 [g1,g2]@1 bb1@1 bb1@1]",
+
+      "[f#4@2 c3@2, a2@1 [a1,a2]@1 c2@1 c2@1]",
+      "[g4@2 ~@2, f#3@1 g3@2 g3@1, bb2@1 [eb2,bb2]@1 g2@1 [eb2,bb2]@1]",
+      "[f#4@2 ~@2, f#3@2 ~@2, a2@1 [d2,a2]@1 f#2@1 [c2,a2]@1]",
+      "[g4@2 bb3@2, ~@1 eb4@2 g3@1, ~@2 g3@2 ~@2, g2@2 ~@2, bb2@2 ~@2]",
+      "[f#4@2 a3@2, g3@1 d4@2 f#3@1, ~@2 f#3@2 ~@2, ~@2 c3@2, a2@2 ~@2]",
+      "[g4@2 bb3@2, f#3@1 eb4@2 g3@1, ~@2 g3@2 ~@2, ~@2 d3@1 bb2@1, bb2@2 ~@2]",
+      "[f#4@2 [a3,a4]@2, g3@1 d4@2 ~@1, ~@2 f#3@2 ~@2, ~@2 c3@1 a2@1, a2@2 ~@2]",
+
+      "[g4@4, g3@1 eb4@1 bb3@1 g3@1]",
+      "[a4@4, c4@1 g4@1 eb4@1 c4@1]",
+      "[a3@1 f#4@1 d4@1 a3@1, f#3@4]",
+      "[a4@4, ~@1 f#4@1 d4@1 a3@1, d3@4, f#3@1 ~@1 ~@1 [a1,a2]@1]",
+      "[g3@1 eb4@1 bb3@1 g3@1, ~@4]",
+      "[c4@1 g4@1 eb4@1 c4@1, ~@4]",
+
+      "[a3@1 f#4@1 d4@1 a3@1, ~@4]",
+      "[f#3@1 f#4@1 d4@1 d5@1, ~@2 ~@1 d3@1, ~@2 ~@1 d2@1]",
+      "[a4@4, d3@4, d2@4]",
+      "[g2@2 d3@2, ~@4]",
+      "[[g1,g2]@4, ~@4]",
+      "[c3@2 eb3@2, ~@4]",
+      "[c2@4, ~@4]",
+
+      "[d3@2 f#3@2, ~@4]",
+      "[~@2 f#3@2, d2@4, ~@4]",
+      gOpen,
+      "[d3@2 g1@2, ~@4]",
+      "[[g1,g2]@4, ~@4]",
+      "[g1@2 ~@2, ~@4]"
+    )
+  )
+    .s('gm_piano')
+    .gain(cat(
+      ...ramp(6, .18, .24),
+      ...ramp(2, .26, .34),
+      ...ramp(16, .30),
+      ...ramp(8, .34, .42),
+      ...ramp(9, .22),
+      ...ramp(8, .30),
+      ...ramp(9, .32, .40),
+      ...ramp(7, .36, .42),
+      ...ramp(7, .38, .46),
+      ...ramp(6, .34),
+      ...ramp(7, .42, .50),
+      ...ramp(6, .28, .14)
+    ))
+    .velocity(perlin.range(0.75, 1))
+    .legato(0.7)
+    .release(0.55)
+    .lpf(5500)
+    .room(0.3)
+    .size(0.8)
+    .delay(0.18)
+    .delaytime(0.375)
+    .delayfeedback(0.28)
+ 
+  .spectrum({color: "blue"})
+  ._pianoroll();
+}
+
+$: sound("bd bd ~ ~ ~ ~ ~ ~")
+  .slow(4)
+  .bank("LinnDrum")
+  .degradeBy(0.18)
+  .gain("0.32 0.18")
+  .lpf(200)
+  .room(0.18)
+
+$: arrange(
+  [6, silence],
+
+  [2, note("[f#3,b3,d4]")
+    .sound("gm_choir_aahs").gain(0.05).attack(1.2).release(2.5).legato(1.2).lpf(1400).room(0.8)],
+
+  [16, note("<[g3,d4] ~ ~ [eb3,bb3] ~ ~ [d3,a3] ~>")
+    .sound("gm_choir_aahs").gain(0.06).attack(0.8).release(2).legato(1.1).lpf(1500).room(0.8)
+    .pan(sine.slow(12).range(0.3, 0.7))],
+
+  [8, stack(
+    note("<[g3,d4] [eb3,bb3] [d3,a3] [g3,d4]>")
+      .sound("gm_choir_aahs").gain(0.09).attack(0.6).release(3).legato(1.2).lpf(1800).room(0.75),
+    note("<[d3,bb3] [bb2,g3] [a2,f#3] [d3,bb3]>")
+      .sound("gm_voice_oohs").gain(0.055).attack(0.8).release(3.5).legato(1.2).lpf(1300).room(0.85)
+  )],
+
+  [9, note("<~ ~ [d3,a3] ~ ~ ~ [g3,d4] ~ ~>")
+    .sound("gm_choir_aahs").gain(0.05).attack(2).release(4).legato(1.3).lpf(1200).room(0.9)],
+
+  [8, note("<[bb2,f3] ~ [a2,e3] ~>")
+    .sound("gm_voice_oohs").gain(0.05).attack(1).release(2.5).legato(1.1).lpf(1300).room(0.8)
+    .pan(sine.slow(8).range(0.35, 0.65))],
+
+  [9, stack(
+    note("<[g3,d4] ~ [a3,e4] ~ [bb3,f4] ~ [a3,e4] ~ [g3,d4]>")
+      .sound("gm_choir_aahs").gain(0.07).attack(0.5).release(2).legato(1.1).lpf(1700).room(0.75),
+    note("<[g3,d4] ~ [a3,e4] ~ [bb3,f4] ~ [a3,e4] ~ [g3,d4]>")
+      .sound("gm_voice_oohs").gain(0.045).attack(0.6).release(2.2).legato(1.1).lpf(1300).room(0.8)
+  )],
+
+  [7, note("[d4,a4]")
+    .sound("gm_voice_oohs").gain(0.05).attack(1.5).release(3).legato(1.2).lpf(1900).room(0.85)],
+
+  [7, stack(
+    note("<[a3,e4] ~ [d3,a3] ~ [a3,e4] ~ ~>")
+      .sound("gm_choir_aahs").gain(0.08).attack(0.15).release(1.2).legato(0.9).lpf(1600).room(0.8),
+    note("<[a3,e4] ~ [d3,a3] ~ [a3,e4] ~ ~>")
+      .sound("gm_voice_oohs").gain(0.05).attack(0.15).release(1.4).legato(0.9).lpf(1200).room(0.85)
+  )],
+
+  [6, note("<[eb3,bb3] [eb3,bb3] [eb3,bb3] [c3,g3] [c3,g3] [c3,g3]>")
+    .sound("gm_choir_aahs").gain(0.08).attack(0.5).release(2.5).legato(1.2).lpf(1700).room(0.8)
+    .pan(sine.slow(6).range(0.3, 0.7))],
+
+  [7, stack(
+    note("<[d3,a3,f#4] [d3,a3,f#4] [d3,a3,f#4] [g3,d4,bb4] [g3,d4,bb4] [g3,d4,bb4] [g3,d4,bb4]>")
+      .sound("gm_choir_aahs").gain(0.11).attack(0.2).release(3).legato(1.2).lpf(2200).room(0.85),
+    note("<[d3,a3,f#4] [d3,a3,f#4] [d3,a3,f#4] [g3,d4,bb4] [g3,d4,bb4] [g3,d4,bb4] [g3,d4,bb4]>")
+      .sound("gm_voice_oohs").gain(0.07).attack(0.3).release(3.5).legato(1.2).lpf(1600).room(0.9)
+  )],
+
+  [6, note("<[g2,d3] ~ ~ [g2,d3] ~ ~>")
+    .sound("gm_choir_aahs").gain(0.045).attack(2).release(5).legato(1.3).lpf(1100).room(0.9)]
+)
+
+$: note("<~ ~ ~ [g3,bb3,d4] ~ ~ ~ [d3,f#3,a3] ~ ~ [eb3,g3,bb3] ~ ~ [c4,eb4,g4] ~ [d3,f#3,a3,c4]>")
+  .slow(4)
+  .sound("gm_string_ensemble_1")
+  .gain(0.11)
+  .attack(1.2)
+  .release(4)
+  .legato(1.1)
+  .lpf(2200)
+  .room(0.75)
+  .pan(sine.slow(20).range(0.32, 0.68))
+
+$: arrange(
+  [6, silence],
+  [2, note("[f#2,b2,d3]").sound("gm_brass_section").gain(0.08).attack(0.4).release(1.5).room(0.5)],
+  [16, silence],
+  [8, note("<[g2,bb2,d3] [a2,c3,e3] [bb2,d3,f3] [a2,c3,e3]>")
+    .sound("gm_brass_section").gain(0.13).attack(0.05).release(0.6).room(0.4)],
+  [9, silence],
+  [8, silence],
+  [9, note("<[g2,bb2,d3] [a2,c3,e3] [bb2,d3,f3] [a2,c3,e3]>")
+    .sound("gm_brass_section").gain(0.09).attack(0.2).release(0.8).room(0.4)],
+  [7, note("<[g2,bb2,d3] [d3,f#3,a3]>")
+    .sound("gm_brass_section").gain(0.1).attack(0.6).release(1.4).room(0.6)],
+  [7, note("<[a2,c3,e3] [d2,f#2,a2]>")
+    .sound("gm_brass_section").gain(0.14).attack(0.05).release(0.7).room(0.5)],
+  [6, note("<[eb3,g3,bb3] [c3,eb3,g3]>")
+    .sound("gm_brass_section").gain(0.11).attack(0.3).release(1.2).room(0.6)],
+  [7, note("<[d3,f#3,a3] [g3,bb3,d4]>")
+    .sound("gm_brass_section").gain(0.17).attack(0.05).release(1.6).room(0.7).shape(0.2)],
+  [6, silence]
+)
+
+$: arrange(
+  [24, silence],
+  [8, note("<g1 a1 bb1 a1>").sound("gm_timpani").gain(0.2).room(0.3)],
+  [33, silence],
+  [7, note("<a1 d1>").sound("gm_timpani").gain(0.24).room(0.3)],
+  [6, silence],
+  [7, note("<d1 g1>").sound("gm_timpani").gain(0.28).room(0.4)],
+  [6, silence]
+)
