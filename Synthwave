@@ -1,0 +1,11 @@
+setcpm(90/4)
+
+$kick: s("x*4").duckorbit(2).duckattack(0.25)._scope()
+
+$sd: s("~ sd ~ sd:4")
+
+$bass: n("<a1 a2 a2 a1 a2 c3 a2>").s("supersaw").scale("f:minor").orbit(2)
+
+$chords: chord("<Cm f Eb2>").s("synth_brass_3").voicing().gain(.4).orbit(2)
+
+$juice: n("<a f d>").s("supersaw").scale("f:minor").orbit(2).dist(1).trans(-24)
