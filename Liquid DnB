@@ -1,0 +1,207 @@
+setGainCurve(x => Math.pow(x, 2))
+setcpm(170/4)
+
+// ersatz:  0 drone | 1 female ahs | 2 reese | 3 rhodes | 4 drumloop 93
+//          5 reverse crash impact | 6 soft drums 170 | 7 vocal stem
+
+// ---------------------------- MIXER ----------------------------
+const BIG_GAIN = slider(0.602)
+const G_KICK  = slider(0.9)
+const G_SNARE = slider(0.75)
+const G_HATS  = slider(0.5)
+const G_BREAK = slider(0.4)
+const G_AMEN  = slider(0.189)
+const G_SUB   = slider(0.8, 0, 2)
+const G_MID   = slider(0.5, 0, 2)
+const G_TOP   = slider(0.35, 0, 2)
+const G_REESE = slider(0.5, 0, 2)
+const G_PADS  = slider(0.212)
+const G_KEYS  = slider(0.5)
+const G_LEAD  = slider(0.258)
+const G_AHS   = slider(0)
+const G_RHO   = slider(0.4)
+const G_SOLO  = slider(0.35)
+const G_TWINK = slider(0.5)
+const G_VOX   = slider(0.6)
+const G_TEXT  = slider(0.4)
+const G_FX    = slider(0.4)
+
+
+const ROLL = "<x@110 [x*8 x*[16 32]]@2 x@16>"
+
+// ---------------------------- DRUMS ----------------------------
+
+$kick: s("bd:1").beat("0,7?,10", 16)
+  .reset(ROLL)
+  .duck("2:3").duckattack(0.18).duckdepth(0.75)   // Sidechain auf Bass + Pads
+  .gain(G_KICK.mul(BIG_GAIN))
+  .mask("<0 0 0 0 1 1 1 1 0 0 1 1 1 1 0 0>/8")
+
+
+$kickx: s("bd:1").beat("2,12?", 16)
+  .duck("2:3").duckattack(0.18).duckdepth(0.75)
+  .gain(G_KICK.mul(0.75).mul(BIG_GAIN))
+  .mask("<0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0>/8")
+
+$snare: s("sd:2").beat("4,12", 16)
+  .gain(G_SNARE.mul(BIG_GAIN))
+  .mask("<0 0 0 0 1 1 1 1 0 0 1 1 1 1 0 0>/8")
+
+
+$ghost: s("sd:2").beat("7?,14?", 16)
+  .gain(G_SNARE.mul(0.35).mul(BIG_GAIN))
+  .mask("<0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0>/8")
+
+
+$hats: s("hh:4*8")
+  .gain("[1 .6 .8 .6]*2".mul(G_HATS).mul(BIG_GAIN))
+  .mask("<0 0 0 1 1 1 1 1 0 0 1 0 0 0 1 0>/8")
+
+
+$hats16: s("hh:4*16")
+  .reset(ROLL)
+  .gain("[1 .5 .7 .5]*4".mul(G_HATS).mul(BIG_GAIN))
+  .mask("<0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0>/8")
+
+
+
+$break: s("ersatz:6").fit()
+  .scrub(irand(16).div(16).seg(8).rib("<12.25 32>", 2))
+  .sometimesBy(0.05, x=>x.ply("2 | 3"))
+  .hpf(2500)
+  .gain(G_BREAK.mul(BIG_GAIN))
+  .mask("<0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0>/8")
+
+
+$amen: s("ersatz:4/2").fit()
+  .scrub(irand(16).div(16).seg("<8 8 8 8 8 8 8 8 8 8 8 8 16 16 8 8>/8").rib("<12.25 32 7 21>", 2))
+  .sometimesBy(0.1, x=>x.ply("2 | 3"))
+  .reset(ROLL)
+  .cut(1).release(0.01)                      // slices ueberlappen nicht mehr
+  .gain(G_AMEN.mul(BIG_GAIN))
+  .mask("<0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0>/8")
+
+
+$fill: s("sd:2*16")
+  .gain(saw.range(0.2, 0.9).mul(G_SNARE).mul(BIG_GAIN))
+  .mask("<0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0>/8")
+  .mask("<0!7 1>")
+
+// ----------------------------- BASS ----------------------------
+// Sub: Grundtöne, 2 Takte pro Akkord
+$sub: note("<f1 db1 ab1 eb1>/2").s("gm_fx_echoes")
+  .attack(0.01).sustain(1).release(0.1)
+  .gain(G_SUB.mul(BIG_GAIN)).orbit(2)
+  .mask("<0 0 0 1 1 1 1 1 0 0 1 1 1 1 0 0>/8")
+
+// Rollender Mid-Bass mit langsamem Filter
+$mid: note("<f2 db2 ab2 eb2>/2")
+  .struct("x ~ ~ x ~ ~ x ~ ~ ~ x ~ x ~ ~ ~")
+  .s("sawtooth")
+  .lpf(sine.range(300, 1800).slow(8)).lpq(4)
+  .attack(0.005).decay(0.15).sustain(0.3).release(0.08)
+  .gain(G_MID.mul(BIG_GAIN)).orbit(2)
+  .mask("<0 0 0 0 1 1 1 1 0 0 1 1 1 1 0 0>/8")
+
+
+$top: note("<f3 db3 ab3 eb3>/2")
+  .struct("~ x ~ ~ x ~ ~ x ~ ~ x ~ ~ x ~ ~")
+  .s("gm_fx_atmosphere").phaser(2).phasercenter(800).release(0.1)
+  .gain(G_TOP.mul(BIG_GAIN)).orbit(2)
+  .mask("<0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0>/8")
+
+
+$reese: s("ersatz:2/2")
+  .speed("<1 .794 1.189 .944>/2")
+  .clip(1)
+  .gain(G_REESE.mul(BIG_GAIN)).orbit(2)
+  .mask("<0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0>/8")
+
+// ------------------------- HARMONIE / MELODIE -------------------
+// Fm9 | Dbmaj9 | Abmaj9 | Ebmaj9 
+const CHORDS = note("<[f3,ab3,c4,eb4,g4] [db3,f3,ab3,c4,eb4] [ab2,eb3,g3,bb3,c4] [eb3,g3,bb3,d4,f4]>/2")
+
+$pads: CHORDS.s("supersaw")
+  .lpf(sine.range(900, 2400).slow(16))
+  .attack(0.8).release(2)
+  .room(0.7).roomsize(6)
+  .gain(G_PADS.mul(BIG_GAIN)).orbit(3)
+  .mask("<1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0>/8")
+
+
+$keys: CHORDS.struct("x ~ ~ x ~ ~ x ~ ~ ~ x ~ ~ ~ ~ ~")
+  .s("piano").lpf(1000)
+  .room(0.8).roomsize(4)
+  .gain(G_KEYS.mul(BIG_GAIN)).orbit(4)
+  .mask("<0 0 0 1 0 0 1 1 1 1 1 1 1 1 0 0>/8")
+
+// Hook über 8 Takte
+const HOOK = note("<[c5@3 eb5@1 f5@4] [g5@3 f5@1 eb5@2 c5@2] [c5@3 db5@1 f5@4] [eb5@3 db5@1 c5@4] [eb5@3 g5@1 ab5@4] [g5@3 eb5@1 c5@2 eb5@2] [bb4@3 d5@1 f5@4] [eb5@3 d5@1 bb4@4]>")
+
+$lead: HOOK.s("supersaw").lpf(3200)
+  .attack(0.02).decay(0.2).sustain(0.7).release(0.5)
+  .echo(3, 3/16, 0.45)                             
+  .room(1.5).roomsize(4)
+  .gain(G_LEAD.mul(BIG_GAIN)).orbit(4)
+  .mask("<0 0 0 0 0 0 1 1 0 1 1 1 1 0 0 0>/8")
+  ._scope()
+
+// strophe 2 ab block 12: hook eine oktave hoeher, heller und leiser
+$lead2: HOOK.transpose(12).s("supersaw").lpf(4500)
+  .attack(0.02).decay(0.2).sustain(0.7).release(0.4)
+  .echo(3, 3/16, 0.4)
+  .room(1).roomsize(4)
+  .gain(G_LEAD.mul(0.5).mul(BIG_GAIN)).orbit(4)
+  .mask("<0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0>/8")
+
+
+const R_BPM = 179
+const R_N = 26.293 * R_BPM / 60
+const R_SEQ = cat(...Array.from({length: 16}, (_, b) => "0 1 2 3".add(b * 4)))
+
+
+
+// Twinkle twinkel kleiner stern
+$twinkle: note("<[c5@2 eb5@1 g5@1] [ab4@2 c5@1 eb5@1] [c5@2 eb5@1 g5@1] [bb4@2 d5@1 f5@1]>")
+  .s("gm_soprano_sax")
+  .struct("x ~ x ~ x ~ ~ x")
+  .degradeBy(0.25)
+  .decay(0.12)
+  .release(0.15)
+  .room(0.5)
+  .roomsize(4)
+  .gain(G_TWINK.mul(BIG_GAIN))
+  .orbit(4)
+  .mask("<0 1 1 1 0 1 0 1 1 1 0 1 0 0 1 1>/8")
+
+
+const SOLO = note("<[f4 ~ ab4 ~ ~ c5 ~ ab4 ~ ~ f4 ~ eb4 ~ f4 ~] [~ f4 ~ ab4 c5 ~ eb5 ~ ~ c5 ab4 ~ ~ f4 ~ ~] [db5 ~ ~ c5 ~ ab4 ~ ~ f4 ~ ab4 c5 ~ ~ db5 ~] [~ eb5 ~ db5 c5 ~ ~ ab4 ~ c5 ~ ~ eb5 ~ db5 ~] [eb5 ~ ~ g5 ~ eb5 ~ c5 ~ ~ ab4 ~ c5 eb5 ~ ~] [~ g5 ~ ab5 g5 ~ eb5 ~ ~ c5 ~ eb5 ~ ~ g5 ~] ~ ~>")
+
+$solo: SOLO.s("sawtooth")
+  .lpf(sine.range(700, 4500).fast(2)).lpq(8)            // wah / quack
+  .attack(0.005).decay(0.1).sustain(0.25).release(0.05) // kurz = funky
+  .superimpose(x=>x.s("sawtooth").transpose(-12).lpf(900))  // fett: saw eine oktave drunter
+  .distort(0.15)
+  .echo(2, 3/16, 0.3)
+  .room(0.3).roomsize(3)
+  .gain(G_SOLO.mul(BIG_GAIN)).orbit(4)
+  .mask("<0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0>/8")
+
+
+
+// Noise-Riser: 8 Takte für jeden Drop
+$riser: s("white*8").sustain(1).attack(0.01).release(0.05)
+  .lpf(saw.slow(8).range(400, 9000)).hpf(300)
+  .gain(saw.slow(8).mul(G_FX).mul(BIG_GAIN))
+  .orbit(4)
+  .mask("<0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0>/8")
+
+
+const IMPACT_SHIFT = -5.056
+$impact: s("ersatz:5/8")
+  .gain(G_FX.mul(BIG_GAIN)).orbit(4)
+  .mask("<0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0>/8")
+  .early(IMPACT_SHIFT)
+
+// Hält Orbit 2 und 3 am Leben, damit der Sidechain nie ins Leere läuft
+$keep: s("gm_blown_bottle").note("c1").orbit("2 3").gain(0)
